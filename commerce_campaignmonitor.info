@@ -1,0 +1,5 @@
+name = Commerce Campaign Monitor
+description = Integration of Campaign Monitor in the Commerce checkout process
+dependencies[] = campaignmonitor
+package = Commerce
+core = 7.x
