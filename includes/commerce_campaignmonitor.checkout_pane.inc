@@ -6,6 +6,10 @@
 function commerce_campaignmonitor_pane_checkout_form($form, &$form_state, $checkout_pane, $order) {
   $pane_form = array();
   global $user;
+  if ($user->uid == 0) {
+    // user is not logged in, assign an empty email address
+    $user->mail = '';
+  }
 
   // Get connected to the API and get lists.
   $cm = CampaignMonitor::getConnector();
