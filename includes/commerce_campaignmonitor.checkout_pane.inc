@@ -6,10 +6,6 @@
 function commerce_campaignmonitor_pane_checkout_form($form, &$form_state, $checkout_pane, $order) {
   $pane_form = array();
   global $user;
-  if ($user->uid == 0) {
-    // user is not logged in, assign an empty email address
-    $user->mail = '';
-  }
 
   // Get connected to the API and get lists.
   $cm = CampaignMonitor::getConnector();
@@ -26,7 +22,7 @@ function commerce_campaignmonitor_pane_checkout_form($form, &$form_state, $check
 
       // Check if the user is subscribed to the current list.
       $default[$list_id] = 0;
-      if ($cm->isSubscribed($list_id, $user->mail)) {
+      if ($user->uid == 0 || $cm->isSubscribed($list_id, $user->mail)) {
         $default[$list_id] = $list_id;
       }
     }
@@ -51,8 +47,8 @@ function commerce_campaignmonitor_pane_checkout_form($form, &$form_state, $check
 function commerce_campaignmonitor_pane_checkout_form_validate($form, &$form_state, $checkout_pane, $order) {
   global $user;
   if ($user->uid == 0) {
-    // user is not logged in, we assign the email address from the account pane to subscribe the user
-    $user->mail = $form_state['values']['account']['login']['mail'];
+    // user is not logged in, we assign the email address and name from the account pane to subscribe the user
+    $user->mail = $user->name = $form_state['values']['account']['login']['mail'];
   }
 
   // Get connected to the API and get lists.
